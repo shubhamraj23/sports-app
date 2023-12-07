@@ -14,7 +14,7 @@ const postNews = async (news) => {
         throw new Error('Missing required data field: description');
     }
 
-    if (!news.tourId || !news.matchId) {
+    if (!news.tourId && !news.matchId) {
         throw new Error('Either tourId or matchId needs to be specified');
     }
 
@@ -31,6 +31,39 @@ const postNews = async (news) => {
     await News.postNews(news);
 }
 
+const getNewsBySportId = async (params) => {
+    const { sportId } = params;
+    if (!sportId) {
+        throw new Error('Missing required parameter: sportId');
+    }
+    await News.validateSportId(sportId);
+
+    return await News.getNewsBySportId(sportId);
+}
+
+const getNewsByTourId = async (params) => {
+    const { tourId } = params;
+    if (!tourId) {
+        throw new Error('Missing required parameter: tourId');
+    }
+    await News.validateTourId(tourId);
+
+    return await News.getNewsByTourId(tourId);
+}
+
+const getNewsByMatchId = async (params) => {
+    const { matchId } = params;
+    if (!matchId) {
+        throw new Error('Missing required parameter: matchId');
+    }
+    await News.validateMatchId(matchId);
+
+    return await News.getNewsByMatchId(matchId);
+}
+
 module.exports = {
-    postNews: postNews
+    postNews: postNews,
+    getNewsBySportId: getNewsBySportId,
+    getNewsByTourId: getNewsByTourId,
+    getNewsByMatchId: getNewsByMatchId
 }
