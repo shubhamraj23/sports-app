@@ -60,3 +60,41 @@ insert ignore into mydb.matches (name, tourId, format, startTime, endTime) value
 insert ignore into mydb.matches (name, tourId, format, startTime, endTime) values ('IND vs WI', 3, 'ODI', '2023-06-12 10:00:00', '2023-06-12 23:00:00');
 insert ignore into mydb.matches (name, tourId, format, startTime, endTime) values ('IND vs WI', 3, 'ODI', '2023-06-14 10:00:00', '2023-06-14 23:00:00');
 insert ignore into mydb.matches (name, tourId, format, startTime, endTime) values ('KER vs JFC', 4, 'soccer', '2022-04-09 18:00:00', '2022-04-09 23:00:00');
+
+
+-- News Model
+create table if not exists mydb.news
+(
+    id int auto_increment not null primary key,
+    title varchar(50) not null,
+    description varchar(200) not null,
+    tourId int not null,
+    matchId int not null,
+    recUpdatedAt timestamp not null default current_timestamp on update current_timestamp,
+    createdAt timestamp not null default current_timestamp,
+    foreign key (tourId) references tours(id),
+    foreign key (matchId) references matches(id)
+);
+
+-- Data for news model.
+insert ignore into mydb.news (title, description, tourId) values ('News 1', 'Description 1', 1);
+insert ignore into mydb.news (title, description, tourId) values ('News 2', 'Description 2', 1);
+insert ignore into mydb.news (title, description, tourId) values ('News 3', 'Description 3', 2);
+insert ignore into mydb.news (title, description, tourId) values ('News 4', 'Description 4', 2);
+insert ignore into mydb.news (title, description, tourId) values ('News 5', 'Description 5', 2);
+insert ignore into mydb.news (title, description, tourId) values ('News 6', 'Description 6', 3);
+insert ignore into mydb.news (title, description, tourId) values ('News 7', 'Description 7', 4);
+insert ignore into mydb.news (title, description, tourId) values ('News 8', 'Description 8', 4);
+insert ignore into mydb.news (title, description, tourId) values ('News 9', 'Description 9', 4);
+insert ignore into mydb.news (title, description, tourId) values ('News 10', 'Description 10', 3);
+insert ignore into mydb.news (title, description, matchId) values ('News 11', 'Description 11', 1);
+insert ignore into mydb.news (title, description, matchId) values ('News 12', 'Description 12', 2);
+insert ignore into mydb.news (title, description, matchId) values ('News 13', 'Description 13', 3);
+insert ignore into mydb.news (title, description, matchId) values ('News 14', 'Description 14', 4);
+insert ignore into mydb.news (title, description, matchId) values ('News 15', 'Description 15', 5);
+insert ignore into mydb.news (title, description, matchId) values ('News 16', 'Description 16', 6);
+insert ignore into mydb.news (title, description, matchId) values ('News 17', 'Description 17', 7);
+insert ignore into mydb.news (title, description, matchId) values ('News 18', 'Description 18', 8);
+insert ignore into mydb.news (title, description, matchId) values ('News 19', 'Description 19', 9);
+insert ignore into mydb.news (title, description, matchId) values ('News 20', 'Description 20', 10);
+insert ignore into mydb.news (title, description, matchId) values ('News 21', 'Description 21', 11);
