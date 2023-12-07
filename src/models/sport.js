@@ -1,9 +1,31 @@
 const mysql = require('../lib/mysql');
 
 const getAllSportsToursAndMatches = async () => {
-    const statement = 'select s.name as sportName, t.name as tourName, m.name as matchName ' +
-        'from matches m inner join tours t on m.tourId = t.id ' +
-        'inner join sports s on t.sportId = s.id';
+    const statement = 
+    `
+    SELECT
+      s.name AS sportName,
+      t.name AS tourName,
+      m.name AS matchName,
+      m.id AS matchId,
+      m.startTime AS startTime,
+      m.format AS format
+
+    FROM
+      matches AS m
+
+    INNER JOIN
+      tours AS t
+
+    ON
+      m.tourId = t.id
+
+    INNER JOIN
+      sports AS s
+
+    ON
+      t.sportId = s.id
+    `
     const parameters = [];
     return await mysql.query(statement, parameters);
 }
