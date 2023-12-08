@@ -15,8 +15,8 @@ services:
       - my-network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pmysecretpassword"]
-      interval: 10s
-      timeout: 15s
+      interval: 300s
+      timeout: 350s
       retries: 10
   app:
     depends_on:
