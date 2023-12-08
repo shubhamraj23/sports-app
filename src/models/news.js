@@ -24,7 +24,7 @@ const postNews = async (news) => {
     }
 
     statement = 
-        `INSERT INTO mydb.news (title, description, sportId, tourId, matchId)
+        `INSERT INTO news (title, description, sportId, tourId, matchId)
         values ("${title}", "${description}", ${sportId}, ${tourId}, ${matchId});`;
     
     await mysql.query(statement);

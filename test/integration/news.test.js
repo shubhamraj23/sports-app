@@ -1,7 +1,8 @@
 const request = require('supertest');
+const mysql = require('../../src/lib/mysql');
 const { app } = require('../../index');
 
-describe('Route to post news.', () => {
+describe('Route to post news', () => {
   let server;
 
   beforeAll((done) => {
@@ -16,7 +17,7 @@ describe('Route to post news.', () => {
     const data = {
       title: "Added via testing",
       description: "Added via testing",
-      tourId: 3
+      tourId: 1
     }
     const response = await request(server).post('/news').send(data);
     expect(response.status).toBe(201);
@@ -72,7 +73,7 @@ describe('Route to post news.', () => {
     const data = {
       title: "Title 1",
       description: "Description 1",
-      sportId: 1
+      sportId: 2
     }
     const response = await request(server).post('/news').send(data);
     expect(response.status).toBe(500);
@@ -114,16 +115,8 @@ describe('Route to fetch news by sportId', () => {
   });
 
   it('should return valid response', async () => {
-    const response = await request(server).get('/news/sport?sportId=1');
+    const response = await request(server).get('/news/sport?sportId=2');
     expect(response.status).toBe(200);
-    console.log(response.body);
-    expect(response.body.length).toBe(4);
-  });
-
-  it('should return valid response', async () => {
-    const response = await request(server).get('/news/sport?sportId=1');
-    expect(response.status).toBe(200);
-    console.log(response.body);
     expect(response.body.length).toBe(6);
   });
 
@@ -152,15 +145,15 @@ describe('Route to fetch news by tourId', () => {
   });
 
   it('should return valid response', async () => {
-    const response = await request(server).get('/news/tour?tourId=1');
+    const response = await request(server).get('/news/tour?tourId=2');
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(6);
   });
 
   it('should return valid response', async () => {
-    const response = await request(server).get('/news/tour?tourId=4');
+    const response = await request(server).get('/news/tour?tourId=3');
     expect(response.status).toBe(200);
-    expect(response.body.length).toBe(4);
+    expect(response.body.length).toBe(5);
   });
 
   it('should throw missing tourId error', async () => {
@@ -210,4 +203,60 @@ describe('Route to fetch news by matchId', () => {
     expect(response.status).toBe(500);
     expect(response.text).toContain('Invalid matchId');
   });
+});
+
+describe('Route to post tour news adds news to sport', () => {
+  let server;
+
+  beforeAll((done) => {
+    server = app.listen(done);
+  });
+
+  afterAll((done) => {
+    server.close(done);
+  });
+
+  it('should post tour news and add news to sport', async () => {
+    const data = {
+      title: "Added via testing",
+      description: "Added via testing",
+      tourId: 4
+    }
+    const statement = `SELECT COUNT(*) AS ct FROM news WHERE sportId = 2`
+    const results = await mysql.query(statement);
+    const rows = results[0].ct
+
+    await request(server).post('/news').send(data);
+    const response = await request(server).get('/news/sport?sportId=2');
+    expect(response.body.length).toBe(rows + 1);
+  });
+
+});
+
+describe('Route to post match news adds news to tour', () => {
+  let server;
+
+  beforeAll((done) => {
+    server = app.listen(done);
+  });
+
+  afterAll((done) => {
+    server.close(done);
+  });
+
+  it('should post match news and add news to tour', async () => {
+    const data = {
+      title: "Added via testing",
+      description: "Added via testing",
+      matchId: 11
+    }
+    const statement = `SELECT COUNT(*) AS ct FROM news WHERE tourId = 4`
+    const results = await mysql.query(statement);
+    const rows = results[0].ct
+
+    await request(server).post('/news').send(data);
+    const response = await request(server).get('/news/tour?tourId=4');
+    expect(response.body.length).toBe(rows + 1);
+  });
+
 });

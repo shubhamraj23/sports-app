@@ -18,7 +18,7 @@ const config = {
       host: 'localhost'
     },
     database: {
-      host: 'localhost',
+      host: 'db',
       port: 3306,
       username: 'myuser',
       password: 'mypassword',
