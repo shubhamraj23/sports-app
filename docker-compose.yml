@@ -13,9 +13,15 @@ services:
       - ./src/migration/base.sql:/docker-entrypoint-initdb.d/base.sql
     networks:
       - my-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pmysecretpassword"]
+      interval: 10s
+      timeout: 15s
+      retries: 10
   app:
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     build:
       context: .
       dockerfile: Dockerfile

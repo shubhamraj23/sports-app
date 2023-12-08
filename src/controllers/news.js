@@ -2,7 +2,7 @@ const News = require('../models/news');
 
 const postNews = async (news) => {
     // Check if data is provided or not.
-    if (!news) {
+    if (Object.keys(news).length === 0) {
         throw new Error('Data Fields missing');
     }
 
